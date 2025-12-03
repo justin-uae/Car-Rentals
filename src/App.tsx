@@ -1,0 +1,98 @@
+import { lazy, Suspense, useEffect } from 'react';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+
+import { BrandedFallback } from './components/LoadingFallback';
+import { initializeAuth } from './slices/authSlice';
+import ScrollToTop from './helper/ScrollToTop';
+import { fetchExchangeRates } from './slices/currencySlice';
+import { useAppDispatch } from './hooks/useRedux';
+import { WhatsAppButton } from './components/WhatsAppButton';
+
+const RentalsDubaiHero = lazy(() => import('./components/RentalsDubaiHero'));
+const Footer = lazy(() => import('./components/Footer'));
+const ItemDetailpage = lazy(() => import('./components/ItemDetailpage'));
+const Navbar = lazy(() => import('./components/Navbar'));
+const ContactUsPage = lazy(() => import('./components/ContactUs'));
+const FallbackPage = lazy(() => import('./components/FallBackPage'));
+const LoginPage = lazy(() => import('./pages/LoginPage'));
+const RegisterPage = lazy(() => import('./pages/RegisterPage'));
+const ProfilePage = lazy(() => import('./pages/ProfilePage'));
+const BookingsPage = lazy(() => import('./pages/BookingsPage'));
+const CartPage = lazy(() => import('./pages/CartPage'));
+const AboutPage = lazy(() => import('./pages/AboutUs'));
+const OrderConfirmation = lazy(() => import('./pages/OrderConfirmation'));
+const ViewAllRentals = lazy(() => import('./pages/ViewAllRentals'))
+const ProtectedRoute = lazy(() => import('./components/ProtectedRoute'));
+
+function App() {
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    // Initialize auth on app load
+    dispatch(initializeAuth() as any);
+  }, [dispatch]);
+
+  useEffect(() => {
+    // Fetch exchange rates on app load
+    dispatch(fetchExchangeRates());
+
+    // Refresh rates every 1 hour
+    const interval = setInterval(() => {
+      dispatch(fetchExchangeRates());
+    }, 60 * 60 * 1000); // 1 hour
+
+    return () => clearInterval(interval);
+  }, [dispatch]);
+
+  return (
+    <BrowserRouter>
+      <ScrollToTop />
+      <Suspense fallback={<BrandedFallback />}>
+        <Navbar />
+        <main className="pt-10">
+          <Routes>
+            <Route path='/' element={<RentalsDubaiHero />} />
+            <Route path='/contact' element={<ContactUsPage />} />
+            <Route path='/login' element={<LoginPage />} />
+            <Route path='/register' element={<RegisterPage />} />
+            <Route path='/about' element={<AboutPage />} />
+            <Route path='/fleets' element={<ViewAllRentals />} />
+            <Route path='/fleets/:id' element={<ItemDetailpage />} />
+
+            <Route
+              path="/bookings"
+              element={
+                <ProtectedRoute>
+                  <BookingsPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/profile"
+              element={
+                <ProtectedRoute>
+                  <ProfilePage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/order-success"
+              element={
+                <ProtectedRoute>
+                  <OrderConfirmation />
+                </ProtectedRoute>
+              }
+            />
+            <Route path='/cart' element={<CartPage />} />
+            <Route path='*' element={<FallbackPage />} />
+          </Routes>
+        </main>
+        <Footer />
+        <WhatsAppButton />
+        {/* <SimpleChatbot /> */}
+      </Suspense>
+    </BrowserRouter>
+  );
+}
+
+export default App;
