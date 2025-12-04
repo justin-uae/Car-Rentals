@@ -17,6 +17,14 @@ interface Product {
   rating: number;
   reviewsCount: number;
   groupSize: string;
+  // Car rental specific fields
+  seats?: string;
+  acceleration?: string;
+  maxSpeed?: string;
+  fuelType?: string;
+  year?: string;
+  carType?: string;
+  brand?: string;
 }
 
 interface ProductDetail extends Product {
@@ -306,7 +314,14 @@ export const getAllExcursions = async (): Promise<Product[]> => {
               {namespace: "custom", key: "duration"},
               {namespace: "custom", key: "rating"},
               {namespace: "custom", key: "reviews_count"},
-              {namespace: "custom", key: "group_size"}
+              {namespace: "custom", key: "group_size"},
+              {namespace: "custom", key: "seats"},
+              {namespace: "custom", key: "0_100_km_h"},
+              {namespace: "custom", key: "max_speed"},
+              {namespace: "custom", key: "fuel_type"},
+              {namespace: "custom", key: "year"},
+              {namespace: "custom", key: "car_type"},
+              {namespace: "custom", key: "brand"}
             ]) {
               key
               value
@@ -332,6 +347,14 @@ export const getAllExcursions = async (): Promise<Product[]> => {
     rating: parseFloat(edge.node.metafields?.find((m: Metafield) => m?.key === 'rating')?.value || '0'),
     reviewsCount: parseInt(edge.node.metafields?.find((m: Metafield) => m?.key === 'reviews_count')?.value || '0'),
     groupSize: edge.node.metafields?.find((m: Metafield) => m?.key === 'group_size')?.value || '',
+    // Car rental specific fields
+    seats: edge.node.metafields?.find((m: Metafield) => m?.key === 'seats')?.value || '',
+    acceleration: edge.node.metafields?.find((m: Metafield) => m?.key === '0_100_km_h')?.value || '',
+    maxSpeed: edge.node.metafields?.find((m: Metafield) => m?.key === 'max_speed')?.value || '',
+    fuelType: edge.node.metafields?.find((m: Metafield) => m?.key === 'fuel_type')?.value || '',
+    year: edge.node.metafields?.find((m: Metafield) => m?.key === 'year')?.value || '',
+    carType: edge.node.metafields?.find((m: Metafield) => m?.key === 'car_type')?.value || '',
+    brand: edge.node.metafields?.find((m: Metafield) => m?.key === 'brand')?.value || '',
   }));
 };
 
@@ -384,7 +407,14 @@ export const getExcursionById = async (productId: string): Promise<ProductDetail
           {namespace: "custom", key: "group_size"},
           {namespace: "custom", key: "highlights"},
           {namespace: "custom", key: "inclusions"},
-          {namespace: "custom", key: "whats_included"}
+          {namespace: "custom", key: "whats_included"},
+          {namespace: "custom", key: "seats"},
+          {namespace: "custom", key: "0_100_km_h"},
+          {namespace: "custom", key: "max_speed"},
+          {namespace: "custom", key: "fuel_type"},
+          {namespace: "custom", key: "year"},
+          {namespace: "custom", key: "car_type"},
+          {namespace: "custom", key: "brand"}
         ]) {
           key
           value
@@ -434,6 +464,14 @@ export const getExcursionById = async (productId: string): Promise<ProductDetail
     highlights: JSON.parse(product.metafields?.find((m: Metafield) => m?.key === 'highlights')?.value || '[]'),
     whatsIncluded: JSON.parse(product.metafields?.find((m: Metafield) => m?.key === 'whats_included')?.value || '[]'),
     inclusions: inclusions,
+    // Car rental specific fields
+    seats: product.metafields?.find((m: Metafield) => m?.key === 'seats')?.value || '',
+    acceleration: product.metafields?.find((m: Metafield) => m?.key === '0_100_km_h')?.value || '',
+    maxSpeed: product.metafields?.find((m: Metafield) => m?.key === 'max_speed')?.value || '',
+    fuelType: product.metafields?.find((m: Metafield) => m?.key === 'fuel_type')?.value || '',
+    year: product.metafields?.find((m: Metafield) => m?.key === 'year')?.value || '',
+    carType: product.metafields?.find((m: Metafield) => m?.key === 'car_type')?.value || '',
+    brand: product.metafields?.find((m: Metafield) => m?.key === 'brand')?.value || '',
   };
 };
 

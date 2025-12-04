@@ -13,6 +13,14 @@ interface Product {
     rating: number;
     reviewsCount: number;
     groupSize: string;
+    // Car rental specific fields
+    seats?: string;
+    acceleration?: string;
+    maxSpeed?: string;
+    fuelType?: string;
+    year?: string;
+    carType?: string;
+    brand?: string;
 }
 
 interface Variant {

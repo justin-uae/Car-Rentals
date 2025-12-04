@@ -34,7 +34,7 @@ export const ExcursionCard = ({ excursion }: { excursion: Product }) => {
             onClick={() => goToDetail(excursion.id)}
         >
             {/* Image Container */}
-            <div className="relative h-64 overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
+            <div className="relative h-50 overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
                 <LazyImage
                     src={`${excursion.images[0]}?width=400&height=300&crop=center`}
                     alt={excursion.title}

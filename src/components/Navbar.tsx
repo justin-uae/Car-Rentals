@@ -107,7 +107,7 @@ const Header: React.FC<HeaderProps> = () => {
             <div className="border-r border-gray-700 pr-4">
               <CurrencySwitcher />
             </div>
-            <Link
+            {/* <Link
               to="/cart"
               className="relative p-2.5 hover:bg-gray-900 rounded-full transition-colors group"
             >
@@ -117,7 +117,7 @@ const Header: React.FC<HeaderProps> = () => {
                   {cartCount}
                 </span>
               )}
-            </Link>
+            </Link> */}
 
             {isAuthenticated ? (
               // User Menu

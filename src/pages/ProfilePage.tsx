@@ -25,12 +25,12 @@ export default function ProfilePage() {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-white py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
+        <div className="min-h-screen bg-gradient-to-br from-gray-50 via-gray-100 to-white py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
             <div className="max-w-4xl mx-auto">
                 {/* Profile Card */}
-                <div className="bg-white/90 backdrop-blur-xl rounded-3xl shadow-2xl overflow-hidden border-2 border-amber-100 mb-6">
-                    {/* Gradient Header - Desert Theme */}
-                    <div className="relative bg-gradient-to-br from-amber-600 via-orange-600 to-amber-700 p-8 sm:p-12 text-white overflow-hidden">
+                <div className="bg-white/90 backdrop-blur-xl rounded-3xl shadow-2xl overflow-hidden border-2 border-gray-200 mb-6">
+                    {/* Gradient Header - Luxury Theme */}
+                    <div className="relative bg-gradient-to-br from-red-600 via-red-700 to-red-600 p-8 sm:p-12 text-white overflow-hidden">
                         {/* Decorative pattern */}
                         <div className="absolute inset-0 opacity-10">
                             <div className="absolute top-0 right-0 w-64 h-64 bg-white rounded-full blur-3xl"></div>
@@ -47,7 +47,7 @@ export default function ProfilePage() {
                             <h2 className="text-2xl sm:text-3xl font-black mb-3 break-words px-4">
                                 {user?.displayName || user?.email}
                             </h2>
-                            <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm px-5 py-2.5 rounded-full text-sm sm:text-base text-amber-50 border border-white/20">
+                            <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm px-5 py-2.5 rounded-full text-sm sm:text-base text-gray-50 border border-white/20">
                                 <Calendar className="w-4 h-4" />
                                 <span className="font-bold">Member since {getMemberSinceYear()}</span>
                             </div>
@@ -57,7 +57,7 @@ export default function ProfilePage() {
                     {/* Account Info */}
                     <div className="p-6 sm:p-8 md:p-10">
                         <h3 className="text-xl sm:text-2xl font-black text-gray-900 mb-6 flex items-center gap-3">
-                            <div className="w-10 h-10 bg-gradient-to-br from-amber-500 to-orange-500 rounded-xl flex items-center justify-center shadow-lg">
+                            <div className="w-10 h-10 bg-gradient-to-br from-red-600 to-red-700 rounded-xl flex items-center justify-center shadow-lg">
                                 <Mail className="w-5 h-5 text-white" />
                             </div>
                             Account Details
@@ -66,7 +66,7 @@ export default function ProfilePage() {
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                             {/* Name (if available) */}
                             {(user?.firstName || user?.lastName) && (
-                                <div className="p-5 bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl border-2 border-amber-200 hover:shadow-lg transition-shadow">
+                                <div className="p-5 bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl border-2 border-gray-200 hover:shadow-lg transition-shadow">
                                     <p className="text-xs sm:text-sm text-gray-600 mb-2 font-bold">Full Name</p>
                                     <p className="font-black text-base sm:text-lg text-gray-900">
                                         {`${user?.firstName || ''} ${user?.lastName || ''}`.trim()}
@@ -75,32 +75,32 @@ export default function ProfilePage() {
                             )}
 
                             {/* Email */}
-                            <div className="p-5 bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl border-2 border-amber-200 hover:shadow-lg transition-shadow">
+                            <div className="p-5 bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl border-2 border-gray-200 hover:shadow-lg transition-shadow">
                                 <p className="text-xs sm:text-sm text-gray-600 mb-2 font-bold">Email Address</p>
                                 <p className="font-black text-base sm:text-lg text-gray-900 break-words">{user?.email}</p>
                             </div>
 
                             {/* Member Since */}
-                            <div className="p-5 bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl border-2 border-amber-200 hover:shadow-lg transition-shadow">
+                            <div className="p-5 bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl border-2 border-gray-200 hover:shadow-lg transition-shadow">
                                 <p className="text-xs sm:text-sm text-gray-600 mb-2 flex items-center gap-1 font-bold">
-                                    <Calendar className="w-4 h-4 text-amber-600" />
+                                    <Calendar className="w-4 h-4 text-red-600" />
                                     Member Since
                                 </p>
                                 <p className="font-black text-base sm:text-lg text-gray-900">{getMemberSinceDate()}</p>
                             </div>
 
                             {/* Location */}
-                            <div className="p-5 bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl border-2 border-amber-200 hover:shadow-lg transition-shadow">
+                            <div className="p-5 bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl border-2 border-gray-200 hover:shadow-lg transition-shadow">
                                 <p className="text-xs sm:text-sm text-gray-600 mb-2 flex items-center gap-1 font-bold">
-                                    <MapPin className="w-4 h-4 text-amber-600" />
+                                    <MapPin className="w-4 h-4 text-red-600" />
                                     Location
                                 </p>
                                 <p className="font-black text-base sm:text-lg text-gray-900">United Arab Emirates</p>
                             </div>
 
                             {/* Total Orders */}
-                            <div className="p-5 bg-gradient-to-br from-amber-600 via-orange-600 to-amber-700 rounded-2xl text-white sm:col-span-2 shadow-xl">
-                                <p className="text-xs sm:text-sm text-amber-50 mb-2 flex items-center gap-1 font-bold">
+                            <div className="p-5 bg-gradient-to-br from-red-600 via-red-700 to-red-600 rounded-2xl text-white sm:col-span-2 shadow-xl">
+                                <p className="text-xs sm:text-sm text-gray-50 mb-2 flex items-center gap-1 font-bold">
                                     <ShoppingBag className="w-4 h-4" />
                                     Total Bookings
                                 </p>
@@ -115,10 +115,10 @@ export default function ProfilePage() {
                     {/* View All Orders */}
                     <Link
                         to="/bookings"
-                        className="group bg-white/90 backdrop-blur-xl rounded-2xl shadow-xl overflow-hidden border-2 border-amber-100 hover:shadow-2xl hover:border-amber-300 transition-all duration-300 p-6 sm:p-8"
+                        className="group bg-white/90 backdrop-blur-xl rounded-2xl shadow-xl overflow-hidden border-2 border-gray-200 hover:shadow-2xl hover:border-red-300 transition-all duration-300 p-6 sm:p-8"
                     >
                         <div className="flex flex-col items-center text-center gap-4">
-                            <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-amber-500 to-orange-500 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-lg">
+                            <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-red-600 to-red-700 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-lg">
                                 <ShoppingBag className="w-8 h-8 sm:w-10 sm:h-10 text-white" />
                             </div>
                             <div>
@@ -128,18 +128,18 @@ export default function ProfilePage() {
                         </div>
                     </Link>
 
-                    {/* Browse Tours */}
+                    {/* Browse Fleet */}
                     <Link
                         to="/fleets"
-                        className="group bg-white/90 backdrop-blur-xl rounded-2xl shadow-xl overflow-hidden border-2 border-amber-100 hover:shadow-2xl hover:border-amber-300 transition-all duration-300 p-6 sm:p-8"
+                        className="group bg-white/90 backdrop-blur-xl rounded-2xl shadow-xl overflow-hidden border-2 border-gray-200 hover:shadow-2xl hover:border-red-300 transition-all duration-300 p-6 sm:p-8"
                     >
                         <div className="flex flex-col items-center text-center gap-4">
-                            <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-orange-500 to-amber-600 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-lg">
+                            <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-red-700 to-red-800 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-lg">
                                 <Package className="w-8 h-8 sm:w-10 sm:h-10 text-white" />
                             </div>
                             <div>
-                                <h3 className="text-lg sm:text-xl font-black text-gray-900 mb-2">Browse Safaris</h3>
-                                <p className="text-sm sm:text-base text-gray-600 font-semibold">Explore new adventures</p>
+                                <h3 className="text-lg sm:text-xl font-black text-gray-900 mb-2">Browse Fleet</h3>
+                                <p className="text-sm sm:text-base text-gray-600 font-semibold">Explore premium vehicles</p>
                             </div>
                         </div>
                     </Link>
@@ -148,7 +148,7 @@ export default function ProfilePage() {
                 {/* Back to Home */}
                 <div className="text-center">
                     <Link
-                        className="inline-flex items-center gap-2 bg-white/90 backdrop-blur-sm hover:bg-white text-gray-700 hover:text-amber-700 font-bold py-3 px-8 text-sm sm:text-base rounded-2xl transition-all transform hover:scale-105 shadow-xl border-2 border-amber-200 hover:border-amber-300"
+                        className="inline-flex items-center gap-2 bg-white/90 backdrop-blur-sm hover:bg-white text-gray-700 hover:text-red-700 font-bold py-3 px-8 text-sm sm:text-base rounded-2xl transition-all transform hover:scale-105 shadow-xl border-2 border-gray-200 hover:border-red-300"
                         to={"/"}
                     >
                         Go to Home

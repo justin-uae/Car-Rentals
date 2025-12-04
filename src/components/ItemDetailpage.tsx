@@ -1,9 +1,8 @@
 import { useState, useEffect, useMemo } from 'react';
-import { Link, useParams, useNavigate } from 'react-router-dom';
-import { MapPin, Clock, Users, Calendar, Star, ChevronLeft, ChevronRight, CheckCircle, Check, Sparkles, ArrowRight, ChevronUp, ChevronDown, Info, AlertCircle, Gauge, Fuel, Settings } from 'lucide-react';
+import { Link, useParams } from 'react-router-dom';
+import { MapPin, Users, Star, ChevronLeft, ChevronRight, CheckCircle, Check, Sparkles, ChevronUp, ChevronDown, Info, AlertCircle, Gauge, Fuel, Settings, Car as CarIcon } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '../hooks/useRedux';
 import { fetchExcursionById } from '../slices/productsSlice';
-import { addToCartAsync } from '../slices/cartSlice';
 import { LazyImage } from './LazyImage';
 import { BookingSkeleton, DetailsSkeleton, ImageGallerySkeleton } from './Skeletons/ItemDetailPage';
 import { FaWhatsapp } from 'react-icons/fa';
@@ -12,25 +11,12 @@ import { useCurrency } from '../hooks/useCurrency';
 export default function ItemDetailpage() {
     const { id } = useParams<{ id: string }>();
     const dispatch = useAppDispatch();
-    const navigate = useNavigate();
 
-    // Get product and cart state from Redux
+    // Get product state from Redux
     const { selectedProduct: excursion, loading } = useAppSelector((state) => state.products);
     const { formatPrice } = useCurrency();
 
-    const { checkout } = useAppSelector((state) => state.cart);
-
-    // Get today's date in YYYY-MM-DD format
-    const getTodayDate = () => {
-        const today = new Date();
-        return today.toISOString().split('T')[0];
-    };
-
-    const [pickupDate, setPickupDate] = useState(getTodayDate());
-    const [dropoffDate, setDropoffDate] = useState(getTodayDate());
-    const [rentalDays, setRentalDays] = useState(1);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
-    const [addingToCart, setAddingToCart] = useState(false);
 
     // Accordion states
     const [isOverviewOpen, setIsOverviewOpen] = useState(true);
@@ -45,17 +31,6 @@ export default function ItemDetailpage() {
             dispatch(fetchExcursionById(gidId));
         }
     }, [id, dispatch]);
-
-    // Calculate rental days when dates change
-    useEffect(() => {
-        if (pickupDate && dropoffDate) {
-            const pickup = new Date(pickupDate);
-            const dropoff = new Date(dropoffDate);
-            const diffTime = Math.abs(dropoff.getTime() - pickup.getTime());
-            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-            setRentalDays(diffDays > 0 ? diffDays : 1);
-        }
-    }, [pickupDate, dropoffDate]);
 
     const nextImage = () => {
         if (excursion) {
@@ -89,19 +64,6 @@ export default function ItemDetailpage() {
     }, [excursion?.inclusions]);
 
     const pricePerDay = excursion?.price || 0;
-    const subtotal = formatPrice(pricePerDay * rentalDays);
-
-    // Format date for display
-    const formatDateDisplay = (dateString: string) => {
-        if (!dateString) return 'Select a date';
-        const date = new Date(dateString + 'T00:00:00');
-        return date.toLocaleDateString('en-US', {
-            weekday: 'short',
-            month: 'short',
-            day: 'numeric',
-            year: 'numeric'
-        });
-    };
 
     const handleWhatsAppInquiry = () => {
         if (!excursion) return;
@@ -110,58 +72,19 @@ export default function ItemDetailpage() {
 
         const message = `Hi! I'm interested in renting this vehicle:
 
-    🚗 *${excursion.title}*
-    ${excursion.location ? `📌 Location: ${excursion.location}` : ''}
+🚗 *${excursion.title}*
+${excursion.brand ? `🏢 Brand: ${excursion.brand}` : ''}
+${excursion.carType ? `🚙 Type: ${excursion.carType}` : ''}
+${excursion.location ? `📌 Location: ${excursion.location}` : ''}
 
-    *Rental Details:*
-    📅 Pickup: ${formatDateDisplay(pickupDate)}
-    📅 Dropoff: ${formatDateDisplay(dropoffDate)}
-    ⏱️ Duration: ${rentalDays} ${rentalDays === 1 ? 'day' : 'days'}
+💰 Price: ${formatPrice(pricePerDay)}/day
 
-    💰 Total Price: ${subtotal}
-
-    Can you help me with the booking?`;
+Can you help me with the booking?`;
 
         const encodedMessage = encodeURIComponent(message);
         const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
 
         window.open(whatsappUrl, '_blank');
-    };
-
-    // Handle Book Now
-    const handleBookNow = async () => {
-        if (!excursion) return;
-
-        setAddingToCart(true);
-        try {
-            const result = await dispatch(
-                addToCartAsync({
-                    item: {
-                        variantId: excursion.variants[0].id,
-                        quantity: rentalDays,
-                        title: `${excursion.title} - ${pickupDate} to ${dropoffDate}`,
-                        price: excursion?.price,
-                        image: excursion.images[0],
-                        productId: excursion.id,
-                        customAttributes: {
-                            pickupDate: pickupDate,
-                            dropoffDate: dropoffDate,
-                            rentalDays: rentalDays.toString(),
-                        }
-                    },
-                    currentCheckout: checkout
-                })
-            );
-
-            if (result.meta.requestStatus === 'fulfilled') {
-                navigate('/cart');
-            }
-        } catch (error) {
-            console.error('Error adding to cart:', error);
-            alert('Failed to add to cart. Please try again.');
-        } finally {
-            setAddingToCart(false);
-        }
     };
 
     if (loading) {
@@ -204,49 +127,6 @@ export default function ItemDetailpage() {
 
     return (
         <div className="min-h-screen bg-gradient-to-b from-white via-gray-50/20 to-white">
-            {/* Custom Styles for Date Picker */}
-            <style>{`
-                input[type="date"] {
-                    position: relative;
-                    cursor: pointer;
-                }
-
-                input[type="date"]::-webkit-calendar-picker-indicator {
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    right: 0;
-                    bottom: 0;
-                    width: auto;
-                    height: auto;
-                    color: transparent;
-                    background: transparent;
-                    cursor: pointer;
-                }
-
-                input[type="date"]:hover {
-                    border-color: #DC2626 !important;
-                }
-
-                input[type="date"]:focus {
-                    border-color: #DC2626 !important;
-                    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1) !important;
-                }
-
-                .date-input-wrapper {
-                    position: relative;
-                }
-
-                .date-input-wrapper .calendar-icon {
-                    position: absolute;
-                    right: 12px;
-                    top: 50%;
-                    transform: translateY(-50%);
-                    pointer-events: none;
-                    color: #DC2626;
-                }
-            `}</style>
-
             {/* Breadcrumb */}
             <div className="border-b border-gray-200 bg-gradient-to-r from-gray-50/50 to-gray-100/50">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4">
@@ -318,9 +198,22 @@ export default function ItemDetailpage() {
                         <div className="bg-white rounded-2xl p-6 shadow-lg border-2 border-gray-200">
                             <div className="flex items-start justify-between mb-4 gap-3">
                                 <div className="flex-1 min-w-0">
-                                    <div className="inline-flex items-center gap-2 bg-gradient-to-r from-gray-100 to-gray-200 px-3 py-1.5 rounded-full mb-3">
-                                        <Sparkles className="w-4 h-4 text-red-600" />
-                                        <span className="text-xs font-bold text-red-700 uppercase tracking-wider">Premium Vehicle</span>
+                                    <div className="flex items-center gap-2 mb-3 flex-wrap">
+                                        <div className="inline-flex items-center gap-2 bg-gradient-to-r from-gray-100 to-gray-200 px-3 py-1.5 rounded-full">
+                                            <Sparkles className="w-4 h-4 text-red-600" />
+                                            <span className="text-xs font-bold text-red-700 uppercase tracking-wider">Premium Vehicle</span>
+                                        </div>
+                                        {excursion.brand && (
+                                            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-red-50 to-red-100 px-3 py-1.5 rounded-full">
+                                                <CarIcon className="w-4 h-4 text-red-600" />
+                                                <span className="text-xs font-bold text-red-700 uppercase tracking-wider">{excursion.brand}</span>
+                                            </div>
+                                        )}
+                                        {excursion.year && (
+                                            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-50 to-blue-100 px-3 py-1.5 rounded-full">
+                                                <span className="text-xs font-bold text-blue-700 uppercase tracking-wider">{excursion.year}</span>
+                                            </div>
+                                        )}
                                     </div>
                                     <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-gray-900 mb-3 sm:mb-4">
                                         {excursion.title}
@@ -345,25 +238,40 @@ export default function ItemDetailpage() {
                         </div>
 
                         {/* Quick Info */}
-                        <div className="grid grid-cols-3 gap-3 sm:gap-4">
+                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+                            {excursion.seats && (
+                                <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-4 sm:p-6 text-center border-2 border-gray-200 shadow-md hover:shadow-lg transition-all">
+                                    <Users className="w-6 h-6 sm:w-7 sm:h-7 text-red-600 mx-auto mb-2" />
+                                    <div className="text-lg sm:text-xl md:text-2xl font-black text-gray-900 mb-1">
+                                        {excursion.seats}
+                                    </div>
+                                    <div className="text-xs sm:text-sm text-gray-600 font-semibold">Seats</div>
+                                </div>
+                            )}
+                            {excursion.fuelType && (
+                                <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-4 sm:p-6 text-center border-2 border-gray-200 shadow-md hover:shadow-lg transition-all">
+                                    <Fuel className="w-6 h-6 sm:w-7 sm:h-7 text-red-600 mx-auto mb-2" />
+                                    <div className="text-lg sm:text-xl md:text-2xl font-black text-gray-900 mb-1">
+                                        {excursion.fuelType}
+                                    </div>
+                                    <div className="text-xs sm:text-sm text-gray-600 font-semibold">Fuel Type</div>
+                                </div>
+                            )}
+                            {excursion.carType && (
+                                <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-4 sm:p-6 text-center border-2 border-gray-200 shadow-md hover:shadow-lg transition-all">
+                                    <Gauge className="w-6 h-6 sm:w-7 sm:h-7 text-red-600 mx-auto mb-2" />
+                                    <div className="text-lg sm:text-xl md:text-2xl font-black text-gray-900 mb-1">
+                                        {excursion.carType}
+                                    </div>
+                                    <div className="text-xs sm:text-sm text-gray-600 font-semibold">Type</div>
+                                </div>
+                            )}
                             <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-4 sm:p-6 text-center border-2 border-gray-200 shadow-md hover:shadow-lg transition-all">
-                                <Gauge className="w-6 h-6 sm:w-7 sm:h-7 text-red-600 mx-auto mb-2" />
+                                <Settings className="w-6 h-6 sm:w-7 sm:h-7 text-red-600 mx-auto mb-2" />
                                 <div className="text-lg sm:text-xl md:text-2xl font-black text-gray-900 mb-1">
-                                    {excursion.duration || 'Auto'}
+                                    Auto
                                 </div>
                                 <div className="text-xs sm:text-sm text-gray-600 font-semibold">Transmission</div>
-                            </div>
-                            <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-4 sm:p-6 text-center border-2 border-gray-200 shadow-md hover:shadow-lg transition-all">
-                                <Users className="w-6 h-6 sm:w-7 sm:h-7 text-red-600 mx-auto mb-2" />
-                                <div className="text-lg sm:text-xl md:text-2xl font-black text-gray-900 mb-1">
-                                    {excursion.groupSize || '4-5'}
-                                </div>
-                                <div className="text-xs sm:text-sm text-gray-600 font-semibold">Passengers</div>
-                            </div>
-                            <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-4 sm:p-6 text-center border-2 border-gray-200 shadow-md hover:shadow-lg transition-all">
-                                <Fuel className="w-6 h-6 sm:w-7 sm:h-7 text-red-600 mx-auto mb-2" />
-                                <div className="text-lg sm:text-xl md:text-2xl font-black text-gray-900 mb-1">Petrol</div>
-                                <div className="text-xs sm:text-sm text-gray-600 font-semibold">Fuel Type</div>
                             </div>
                         </div>
 
@@ -460,22 +368,48 @@ export default function ItemDetailpage() {
                             {isSpecsOpen && (
                                 <div className="px-6 pb-6">
                                     <div className="grid grid-cols-2 gap-4">
-                                        <div className="bg-gray-50 rounded-xl p-4 border-2 border-gray-200">
-                                            <div className="text-xs text-gray-600 mb-1 font-semibold">Engine</div>
-                                            <div className="text-sm font-bold text-gray-900">V6 / V8</div>
-                                        </div>
-                                        <div className="bg-gray-50 rounded-xl p-4 border-2 border-gray-200">
-                                            <div className="text-xs text-gray-600 mb-1 font-semibold">Horsepower</div>
-                                            <div className="text-sm font-bold text-gray-900">300+ HP</div>
-                                        </div>
-                                        <div className="bg-gray-50 rounded-xl p-4 border-2 border-gray-200">
-                                            <div className="text-xs text-gray-600 mb-1 font-semibold">0-100 km/h</div>
-                                            <div className="text-sm font-bold text-gray-900">5-7 sec</div>
-                                        </div>
-                                        <div className="bg-gray-50 rounded-xl p-4 border-2 border-gray-200">
-                                            <div className="text-xs text-gray-600 mb-1 font-semibold">Top Speed</div>
-                                            <div className="text-sm font-bold text-gray-900">250 km/h</div>
-                                        </div>
+                                        {excursion.seats && (
+                                            <div className="bg-gray-50 rounded-xl p-4 border-2 border-gray-200">
+                                                <div className="text-xs text-gray-600 mb-1 font-semibold">Seats</div>
+                                                <div className="text-sm font-bold text-gray-900">{excursion.seats}</div>
+                                            </div>
+                                        )}
+                                        {excursion.fuelType && (
+                                            <div className="bg-gray-50 rounded-xl p-4 border-2 border-gray-200">
+                                                <div className="text-xs text-gray-600 mb-1 font-semibold">Fuel Type</div>
+                                                <div className="text-sm font-bold text-gray-900">{excursion.fuelType}</div>
+                                            </div>
+                                        )}
+                                        {excursion.acceleration && (
+                                            <div className="bg-gray-50 rounded-xl p-4 border-2 border-gray-200">
+                                                <div className="text-xs text-gray-600 mb-1 font-semibold">0-100 km/h</div>
+                                                <div className="text-sm font-bold text-gray-900">{excursion.acceleration} sec</div>
+                                            </div>
+                                        )}
+                                        {excursion.maxSpeed && (
+                                            <div className="bg-gray-50 rounded-xl p-4 border-2 border-gray-200">
+                                                <div className="text-xs text-gray-600 mb-1 font-semibold">Top Speed</div>
+                                                <div className="text-sm font-bold text-gray-900">{excursion.maxSpeed} km/h</div>
+                                            </div>
+                                        )}
+                                        {excursion.year && (
+                                            <div className="bg-gray-50 rounded-xl p-4 border-2 border-gray-200">
+                                                <div className="text-xs text-gray-600 mb-1 font-semibold">Year</div>
+                                                <div className="text-sm font-bold text-gray-900">{excursion.year}</div>
+                                            </div>
+                                        )}
+                                        {excursion.carType && (
+                                            <div className="bg-gray-50 rounded-xl p-4 border-2 border-gray-200">
+                                                <div className="text-xs text-gray-600 mb-1 font-semibold">Body Type</div>
+                                                <div className="text-sm font-bold text-gray-900">{excursion.carType}</div>
+                                            </div>
+                                        )}
+                                        {excursion.brand && (
+                                            <div className="bg-gray-50 rounded-xl p-4 border-2 border-gray-200">
+                                                <div className="text-xs text-gray-600 mb-1 font-semibold">Brand</div>
+                                                <div className="text-sm font-bold text-gray-900">{excursion.brand}</div>
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             )}
@@ -558,171 +492,106 @@ export default function ItemDetailpage() {
 
                     {/* Right Column - Booking */}
                     <div className="lg:col-span-1">
-                        <div className="sticky top-4 sm:top-8">
-                            <div className="bg-white border-2 border-gray-200 rounded-3xl p-6 sm:p-8 shadow-2xl">
-                                {/* Price */}
-                                <div className="mb-6">
-                                    {excursion.price && (
-                                        <div className="flex items-center gap-3 mb-2">
-                                            {/* Original Price */}
-                                            <span className="text-sm text-gray-500 line-through font-medium">
-                                                {formatPrice(excursion.price + 60)}
-                                            </span>
-                                            {/* Discount Badge */}
-                                            <span className="bg-gradient-to-r from-red-600 to-red-700 text-white text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1 shadow-md">
-                                                <Sparkles className="w-3 h-3" />
-                                                {Math.round(((60) / (excursion.price + 60)) * 100)}% OFF
-                                            </span>
-                                        </div>
-                                    )}
-                                    <div className="text-4xl sm:text-5xl font-black bg-gradient-to-r from-red-600 to-red-700 bg-clip-text text-transparent">
+                        <div className="sticky top-4 sm:top-8 space-y-6">
+                            {/* Price Card */}
+                            <div className="bg-gradient-to-br from-white to-gray-50 border-2 border-gray-200 rounded-3xl p-8 shadow-2xl">
+                                <div className="text-center mb-8">
+                                    <p className="text-sm text-gray-600 font-semibold mb-3 uppercase tracking-wide">Starting From</p>
+                                    <div className="text-5xl font-black bg-gradient-to-r from-red-600 to-red-700 bg-clip-text text-transparent mb-3">
                                         {formatPrice(excursion.price)}
                                     </div>
-                                    <div className="text-sm text-gray-600 mt-1 font-medium">per day</div>
+                                    <p className="text-lg text-gray-700 font-bold">per day</p>
                                 </div>
 
-                                {/* Date Selection */}
-                                <div className="space-y-4 mb-6">
-                                    <div>
-                                        <label className="block text-sm font-bold text-gray-900 mb-2">
-                                            Pickup Date
-                                        </label>
-
-                                        {/* Date Display Box */}
-                                        <div className="bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl p-4 mb-3 border-2 border-gray-200">
-                                            <div className="flex items-center gap-3">
-                                                <div className="bg-gradient-to-br from-red-600 to-red-700 rounded-lg p-2 flex-shrink-0">
-                                                    <Calendar className="w-5 h-5 text-white" />
-                                                </div>
-                                                <div className="flex-1 min-w-0">
-                                                    <div className="text-xs text-gray-600 mb-0.5 font-medium">Pickup</div>
-                                                    <div className="text-sm font-bold text-gray-900 truncate">
-                                                        {formatDateDisplay(pickupDate)}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        {/* Styled Date Input */}
-                                        <div className="date-input-wrapper">
-                                            <input
-                                                type="date"
-                                                value={pickupDate}
-                                                onChange={(e) => setPickupDate(e.target.value)}
-                                                min={getTodayDate()}
-                                                className="w-full px-4 py-3 pr-12 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-400 focus:border-red-400 transition-all font-semibold text-gray-900 hover:border-red-300 cursor-pointer"
-                                            />
-                                            <Calendar className="calendar-icon w-5 h-5" />
-                                        </div>
+                                {/* Divider */}
+                                <div className="relative mb-8">
+                                    <div className="absolute inset-0 flex items-center">
+                                        <div className="w-full border-t-2 border-gray-200"></div>
                                     </div>
-
-                                    <div>
-                                        <label className="block text-sm font-bold text-gray-900 mb-2">
-                                            Dropoff Date
-                                        </label>
-
-                                        {/* Date Display Box */}
-                                        <div className="bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl p-4 mb-3 border-2 border-gray-200">
-                                            <div className="flex items-center gap-3">
-                                                <div className="bg-gradient-to-br from-red-600 to-red-700 rounded-lg p-2 flex-shrink-0">
-                                                    <Calendar className="w-5 h-5 text-white" />
-                                                </div>
-                                                <div className="flex-1 min-w-0">
-                                                    <div className="text-xs text-gray-600 mb-0.5 font-medium">Dropoff</div>
-                                                    <div className="text-sm font-bold text-gray-900 truncate">
-                                                        {formatDateDisplay(dropoffDate)}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        {/* Styled Date Input */}
-                                        <div className="date-input-wrapper">
-                                            <input
-                                                type="date"
-                                                value={dropoffDate}
-                                                onChange={(e) => setDropoffDate(e.target.value)}
-                                                min={pickupDate}
-                                                className="w-full px-4 py-3 pr-12 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-400 focus:border-red-400 transition-all font-semibold text-gray-900 hover:border-red-300 cursor-pointer"
-                                            />
-                                            <Calendar className="calendar-icon w-5 h-5" />
-                                        </div>
-                                    </div>
-
-                                    {/* Rental Duration Display */}
-                                    <div className="flex items-center gap-2 text-sm p-3 bg-gray-50 rounded-xl border-2 border-gray-200">
-                                        <Clock className="w-4 h-4 text-red-600 flex-shrink-0" />
-                                        <span className="text-gray-700 font-medium">
-                                            Rental Duration: <span className="font-bold text-gray-900">{rentalDays}</span> {rentalDays === 1 ? 'day' : 'days'}
+                                    <div className="relative flex justify-center">
+                                        <span className="bg-gradient-to-br from-white to-gray-50 px-4 text-sm font-bold text-gray-500 uppercase tracking-wider">
+                                            Get Started
                                         </span>
                                     </div>
                                 </div>
 
-                                {/* Total */}
-                                <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl p-4 mb-6 border-2 border-gray-200">
-                                    <div className="flex items-center justify-between mb-2 text-sm">
-                                        <span className="text-gray-700 font-medium">
-                                            Daily Rate
-                                        </span>
-                                        <span className="font-bold text-gray-900">
-                                            {formatPrice(pricePerDay)}
-                                        </span>
+                                {/* WhatsApp Inquiry Button */}
+                                <button
+                                    onClick={handleWhatsAppInquiry}
+                                    className="w-full bg-gradient-to-r from-green-500 via-green-600 to-green-500 hover:from-green-600 hover:via-green-700 hover:to-green-600 text-white font-bold py-5 rounded-2xl transition-all transform hover:scale-105 active:scale-95 shadow-xl hover:shadow-2xl flex items-center justify-center gap-3 group mb-4"
+                                >
+                                    <FaWhatsapp className="w-7 h-7 group-hover:rotate-12 transition-transform" />
+                                    <span className="text-lg">Inquire Now</span>
+                                </button>
+
+                                <p className="text-sm text-center text-gray-600 font-medium leading-relaxed">
+                                    Chat with our team for instant quotes and personalized service
+                                </p>
+                            </div>
+
+                            {/* What's Included Card */}
+                            <div className="bg-white border-2 border-gray-200 rounded-3xl p-8 shadow-xl">
+                                <h3 className="font-black text-xl text-gray-900 mb-6 flex items-center gap-3">
+                                    <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center">
+                                        <CheckCircle className="w-6 h-6 text-white" />
                                     </div>
-                                    <div className="flex items-center justify-between mb-2 text-sm">
-                                        <span className="text-gray-700 font-medium">
-                                            Duration ({rentalDays} {rentalDays === 1 ? 'day' : 'days'})
-                                        </span>
-                                        <span className="font-bold text-gray-900">
-                                            {subtotal}
-                                        </span>
-                                    </div>
-                                    <div className="border-t-2 border-gray-200 pt-3 mt-2">
-                                        <div className="flex items-center justify-between">
-                                            <span className="text-lg font-black text-gray-900">Total</span>
-                                            <span className="text-2xl font-black bg-gradient-to-r from-red-600 to-red-700 bg-clip-text text-transparent">
-                                                {subtotal}
-                                            </span>
+                                    What's Included
+                                </h3>
+                                <div className="space-y-4">
+                                    <div className="flex items-start gap-3">
+                                        <div className="w-6 h-6 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
+                                            <Check className="w-4 h-4 text-green-600 font-bold" />
+                                        </div>
+                                        <div className="flex-1">
+                                            <p className="font-bold text-gray-900 text-sm mb-1">Comprehensive Insurance</p>
+                                            <p className="text-xs text-gray-600">Full coverage for peace of mind</p>
                                         </div>
                                     </div>
-                                </div>
-
-                                <div className="space-y-3">
-                                    <button
-                                        onClick={handleBookNow}
-                                        disabled={addingToCart}
-                                        className="w-full bg-gradient-to-r from-red-600 via-red-700 to-red-600 hover:from-red-700 hover:via-red-800 hover:to-red-700 text-white font-bold py-4 rounded-xl transition-all transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none shadow-xl flex items-center justify-center gap-2"
-                                    >
-                                        {addingToCart ? 'Adding to Cart...' : (
-                                            <>
-                                                Book Now
-                                                <ArrowRight className="w-5 h-5" />
-                                            </>
-                                        )}
-                                    </button>
-                                    <button
-                                        onClick={handleWhatsAppInquiry}
-                                        className="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold py-4 rounded-xl transition-all transform hover:scale-105 shadow-xl flex items-center justify-center gap-2"
-                                    >
-                                        Inquire via WhatsApp
-                                        <FaWhatsapp className="w-5 h-5" />
-                                    </button>
+                                    <div className="flex items-start gap-3">
+                                        <div className="w-6 h-6 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
+                                            <Check className="w-4 h-4 text-green-600 font-bold" />
+                                        </div>
+                                        <div className="flex-1">
+                                            <p className="font-bold text-gray-900 text-sm mb-1">24/7 Support</p>
+                                            <p className="text-xs text-gray-600">Round-the-clock assistance</p>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-start gap-3">
+                                        <div className="w-6 h-6 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
+                                            <Check className="w-4 h-4 text-green-600 font-bold" />
+                                        </div>
+                                        <div className="flex-1">
+                                            <p className="font-bold text-gray-900 text-sm mb-1">Free Delivery</p>
+                                            <p className="text-xs text-gray-600">We bring the car to you</p>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-start gap-3">
+                                        <div className="w-6 h-6 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
+                                            <Check className="w-4 h-4 text-green-600 font-bold" />
+                                        </div>
+                                        <div className="flex-1">
+                                            <p className="font-bold text-gray-900 text-sm mb-1">Flexible Terms</p>
+                                            <p className="text-xs text-gray-600">Daily, weekly, or monthly rentals</p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
-                            {/* Trust Badges */}
-                            <div className="mt-6 bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-6 border-2 border-gray-200 shadow-lg">
+                            {/* Rating Card */}
+                            <div className="bg-gradient-to-br from-red-50 to-red-100/50 border-2 border-red-200 rounded-3xl p-8 shadow-xl">
                                 <div className="text-center">
-                                    <div className="text-4xl font-black bg-gradient-to-r from-red-600 to-red-700 bg-clip-text text-transparent mb-2">
-                                        {excursion.rating?.toFixed(1)}/5
+                                    <div className="text-5xl font-black bg-gradient-to-r from-red-600 to-red-700 bg-clip-text text-transparent mb-3">
+                                        {excursion.rating?.toFixed(1)}
                                     </div>
-                                    <div className="flex items-center justify-center gap-1 mb-2">
+                                    <div className="flex items-center justify-center gap-1 mb-3">
                                         {[...Array(5)].map((_, i) => (
-                                            <Star key={i} className="w-5 h-5 fill-red-600 text-red-600" />
+                                            <Star key={i} className="w-6 h-6 fill-red-600 text-red-600" />
                                         ))}
                                     </div>
-                                    <div className="text-sm text-gray-700 font-semibold">
-                                        Based on {excursion.reviewsCount} reviews
-                                    </div>
+                                    <p className="text-sm text-gray-700 font-bold mb-1">Excellent Rating</p>
+                                    <p className="text-xs text-gray-600 font-medium">
+                                        Based on {excursion.reviewsCount} verified reviews
+                                    </p>
                                 </div>
                             </div>
                         </div>
