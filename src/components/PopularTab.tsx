@@ -1,5 +1,5 @@
 import { useEffect, useRef, useMemo } from 'react';
-import { Star, ChevronLeft, ChevronRight, MapPin, Sparkles } from 'lucide-react';
+import { ChevronLeft, ChevronRight, MapPin, Sparkles } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../hooks/useRedux';
 import { fetchAllExcursions } from '../slices/productsSlice';
@@ -132,14 +132,6 @@ export default function PopularTours() {
                                                 </div>
                                             </div>
                                         )}
-                                    </div>
-
-                                    {/* Rating Badge */}
-                                    <div className="absolute top-3 right-3 bg-white/95 backdrop-blur-sm rounded-full px-2.5 py-1.5 shadow-lg border border-gray-200 flex items-center gap-1">
-                                        <Star className="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-red-600 text-red-600" />
-                                        <span className="text-xs sm:text-sm font-bold text-gray-900">
-                                            {vehicle.rating.toFixed(1)}
-                                        </span>
                                     </div>
                                 </div>
 

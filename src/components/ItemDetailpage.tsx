@@ -195,109 +195,125 @@ Can you help me with the booking?`;
                         </div>
 
                         {/* Title & Details */}
-                        <div className="bg-white rounded-2xl p-6 shadow-lg border-2 border-gray-200">
-                            <div className="flex items-start justify-between mb-4 gap-3">
+                        <div className="bg-gradient-to-br from-white via-gray-50/30 to-white rounded-3xl p-6 sm:p-8 shadow-xl border-2 border-gray-200">
+                            <div className="flex items-start justify-between mb-6 gap-4">
                                 <div className="flex-1 min-w-0">
-                                    <div className="flex items-center gap-2 mb-3 flex-wrap">
-                                        <div className="inline-flex items-center gap-2 bg-gradient-to-r from-gray-100 to-gray-200 px-3 py-1.5 rounded-full">
-                                            <Sparkles className="w-4 h-4 text-red-600" />
-                                            <span className="text-xs font-bold text-red-700 uppercase tracking-wider">Premium Vehicle</span>
+                                    {/* Badges */}
+                                    <div className="flex items-center gap-2 mb-4 flex-wrap">
+                                        <div className="inline-flex items-center gap-2 bg-gradient-to-r from-red-600 to-red-700 px-4 py-2 rounded-full shadow-lg">
+                                            <Sparkles className="w-4 h-4 text-white" />
+                                            <span className="text-xs font-black text-white uppercase tracking-wider">Premium</span>
                                         </div>
                                         {excursion.brand && (
-                                            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-red-50 to-red-100 px-3 py-1.5 rounded-full">
-                                                <CarIcon className="w-4 h-4 text-red-600" />
-                                                <span className="text-xs font-bold text-red-700 uppercase tracking-wider">{excursion.brand}</span>
+                                            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-gray-800 to-gray-900 px-4 py-2 rounded-full shadow-lg">
+                                                <CarIcon className="w-4 h-4 text-white" />
+                                                <span className="text-xs font-black text-white uppercase tracking-wider">{excursion.brand}</span>
                                             </div>
                                         )}
                                         {excursion.year && (
-                                            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-50 to-blue-100 px-3 py-1.5 rounded-full">
-                                                <span className="text-xs font-bold text-blue-700 uppercase tracking-wider">{excursion.year}</span>
+                                            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-blue-700 px-4 py-2 rounded-full shadow-lg">
+                                                <span className="text-xs font-black text-white uppercase tracking-wider">{excursion.year}</span>
                                             </div>
                                         )}
                                     </div>
-                                    <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-gray-900 mb-3 sm:mb-4">
+
+                                    {/* Title */}
+                                    <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-gray-900 mb-4 leading-tight">
                                         {excursion.title}
                                     </h1>
-                                    <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6 text-sm sm:text-base text-gray-600">
+
+                                    {/* Meta Info */}
+                                    <div className="flex flex-wrap items-center gap-4 sm:gap-6 text-sm sm:text-base text-gray-600">
                                         {excursion.location && (
-                                            <div className="flex items-center gap-2">
-                                                <MapPin className="w-4 h-4 sm:w-5 sm:h-5 text-red-600 flex-shrink-0" />
-                                                <span className="truncate font-semibold">{excursion.location}</span>
+                                            <div className="flex items-center gap-2 bg-gray-50 px-3 py-2 rounded-lg">
+                                                <MapPin className="w-5 h-5 text-red-600 flex-shrink-0" />
+                                                <span className="font-bold text-gray-900">{excursion.location}</span>
                                             </div>
                                         )}
-                                        <div className="flex items-center gap-2">
-                                            <Star className="w-4 h-4 sm:w-5 sm:h-5 fill-red-600 text-red-600 flex-shrink-0" />
-                                            <span className="font-bold text-gray-900">
-                                                {excursion.rating?.toFixed(1)}
-                                            </span>
-                                            <span className="truncate font-medium">({excursion.reviewsCount} reviews)</span>
+                                        <div className="flex items-center gap-2 bg-red-50 px-3 py-2 rounded-lg">
+                                            <Star className="w-5 h-5 fill-red-600 text-red-600 flex-shrink-0" />
+                                            <span className="font-black text-gray-900">{4.9}</span>
+                                            <span className="font-semibold text-gray-600">({20} reviews)</span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        {/* Quick Info */}
-                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+                        {/* Quick Info Cards */}
+                        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
                             {excursion.seats && (
-                                <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-4 sm:p-6 text-center border-2 border-gray-200 shadow-md hover:shadow-lg transition-all">
-                                    <Users className="w-6 h-6 sm:w-7 sm:h-7 text-red-600 mx-auto mb-2" />
-                                    <div className="text-lg sm:text-xl md:text-2xl font-black text-gray-900 mb-1">
+                                <div className="group bg-white rounded-2xl p-4 sm:p-6 text-center border-2 border-gray-200 shadow-lg hover:shadow-xl hover:border-red-300 transition-all cursor-pointer">
+                                    <div className="w-12 h-12 sm:w-14 sm:h-14 bg-gradient-to-br from-red-50 to-red-100 rounded-2xl flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
+                                        <Users className="w-6 h-6 sm:w-7 sm:h-7 text-red-600" />
+                                    </div>
+                                    <div className="text-xl sm:text-2xl md:text-3xl font-black text-gray-900 mb-1">
                                         {excursion.seats}
                                     </div>
-                                    <div className="text-xs sm:text-sm text-gray-600 font-semibold">Seats</div>
+                                    <div className="text-xs sm:text-sm text-gray-600 font-bold">Seats</div>
                                 </div>
                             )}
                             {excursion.fuelType && (
-                                <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-4 sm:p-6 text-center border-2 border-gray-200 shadow-md hover:shadow-lg transition-all">
-                                    <Fuel className="w-6 h-6 sm:w-7 sm:h-7 text-red-600 mx-auto mb-2" />
-                                    <div className="text-lg sm:text-xl md:text-2xl font-black text-gray-900 mb-1">
+                                <div className="group bg-white rounded-2xl p-4 sm:p-6 text-center border-2 border-gray-200 shadow-lg hover:shadow-xl hover:border-blue-300 transition-all cursor-pointer">
+                                    <div className="w-12 h-12 sm:w-14 sm:h-14 bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
+                                        <Fuel className="w-6 h-6 sm:w-7 sm:h-7 text-blue-600" />
+                                    </div>
+                                    <div className="text-xl sm:text-2xl md:text-3xl font-black text-gray-900 mb-1">
                                         {excursion.fuelType}
                                     </div>
-                                    <div className="text-xs sm:text-sm text-gray-600 font-semibold">Fuel Type</div>
+                                    <div className="text-xs sm:text-sm text-gray-600 font-bold">Fuel</div>
                                 </div>
                             )}
                             {excursion.carType && (
-                                <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-4 sm:p-6 text-center border-2 border-gray-200 shadow-md hover:shadow-lg transition-all">
-                                    <Gauge className="w-6 h-6 sm:w-7 sm:h-7 text-red-600 mx-auto mb-2" />
-                                    <div className="text-lg sm:text-xl md:text-2xl font-black text-gray-900 mb-1">
+                                <div className="group bg-white rounded-2xl p-4 sm:p-6 text-center border-2 border-gray-200 shadow-lg hover:shadow-xl hover:border-purple-300 transition-all cursor-pointer">
+                                    <div className="w-12 h-12 sm:w-14 sm:h-14 bg-gradient-to-br from-purple-50 to-purple-100 rounded-2xl flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
+                                        <Gauge className="w-6 h-6 sm:w-7 sm:h-7 text-purple-600" />
+                                    </div>
+                                    <div className="text-xl sm:text-2xl md:text-3xl font-black text-gray-900 mb-1">
                                         {excursion.carType}
                                     </div>
-                                    <div className="text-xs sm:text-sm text-gray-600 font-semibold">Type</div>
+                                    <div className="text-xs sm:text-sm text-gray-600 font-bold">Type</div>
                                 </div>
                             )}
-                            <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-4 sm:p-6 text-center border-2 border-gray-200 shadow-md hover:shadow-lg transition-all">
-                                <Settings className="w-6 h-6 sm:w-7 sm:h-7 text-red-600 mx-auto mb-2" />
-                                <div className="text-lg sm:text-xl md:text-2xl font-black text-gray-900 mb-1">
+                            <div className="group bg-white rounded-2xl p-4 sm:p-6 text-center border-2 border-gray-200 shadow-lg hover:shadow-xl hover:border-green-300 transition-all cursor-pointer">
+                                <div className="w-12 h-12 sm:w-14 sm:h-14 bg-gradient-to-br from-green-50 to-green-100 rounded-2xl flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
+                                    <Settings className="w-6 h-6 sm:w-7 sm:h-7 text-green-600" />
+                                </div>
+                                <div className="text-xl sm:text-2xl md:text-3xl font-black text-gray-900 mb-1">
                                     Auto
                                 </div>
-                                <div className="text-xs sm:text-sm text-gray-600 font-semibold">Transmission</div>
+                                <div className="text-xs sm:text-sm text-gray-600 font-bold">Transmission</div>
                             </div>
                         </div>
 
                         {/* Overview - Accordion */}
-                        <div className="bg-white rounded-2xl shadow-lg border-2 border-gray-200 overflow-hidden">
+                        <div className="bg-white rounded-3xl shadow-xl border-2 border-gray-200 overflow-hidden hover:shadow-2xl transition-all">
                             <button
                                 onClick={() => setIsOverviewOpen(!isOverviewOpen)}
-                                className="w-full p-6 flex items-center justify-between hover:bg-gray-50 transition-colors"
+                                className="w-full p-6 sm:p-8 flex items-center justify-between hover:bg-gray-50 transition-colors group"
                             >
-                                <h2 className="text-xl sm:text-2xl font-black text-gray-900 flex items-center gap-2">
-                                    <span className="w-1.5 h-8 bg-gradient-to-b from-red-600 to-red-700 rounded-full"></span>
-                                    Overview
-                                </h2>
-                                <div className="flex-shrink-0 ml-4">
+                                <div className="flex items-center gap-4">
+                                    <div className="w-12 h-12 bg-gradient-to-br from-red-600 to-red-700 rounded-2xl flex items-center justify-center flex-shrink-0">
+                                        <span className="text-white text-xl font-black">O</span>
+                                    </div>
+                                    <h2 className="text-xl sm:text-2xl md:text-3xl font-black text-gray-900">
+                                        Overview
+                                    </h2>
+                                </div>
+                                <div className="flex-shrink-0 ml-4 w-10 h-10 bg-gray-100 rounded-xl flex items-center justify-center group-hover:bg-red-50 transition-colors">
                                     {isOverviewOpen ? (
-                                        <ChevronUp className="w-6 h-6 text-gray-600" />
+                                        <ChevronUp className="w-6 h-6 text-gray-600 group-hover:text-red-600" />
                                     ) : (
-                                        <ChevronDown className="w-6 h-6 text-gray-600" />
+                                        <ChevronDown className="w-6 h-6 text-gray-600 group-hover:text-red-600" />
                                     )}
                                 </div>
                             </button>
 
                             {isOverviewOpen && (
-                                <div className="px-6 pb-6">
+                                <div className="px-6 sm:px-8 pb-6 sm:pb-8">
+                                    <div className="w-full h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent mb-6"></div>
                                     <div
-                                        className="text-sm sm:text-base text-gray-700 leading-relaxed prose prose-sm sm:prose max-w-none"
+                                        className="text-sm sm:text-base lg:text-lg text-gray-700 leading-relaxed prose prose-sm sm:prose lg:prose-lg max-w-none"
                                         dangerouslySetInnerHTML={{ __html: excursion.descriptionHtml }}
                                     />
                                 </div>
@@ -305,38 +321,41 @@ Can you help me with the booking?`;
                         </div>
 
                         {/* Features - Accordion */}
-                        <div className="bg-white rounded-2xl shadow-lg border-2 border-gray-200 overflow-hidden">
+                        <div className="bg-white rounded-3xl shadow-xl border-2 border-gray-200 overflow-hidden hover:shadow-2xl transition-all">
                             <button
                                 onClick={() => setIsFeaturesOpen(!isFeaturesOpen)}
-                                className="w-full p-6 flex items-center justify-between hover:bg-gray-50 transition-colors"
+                                className="w-full p-6 sm:p-8 flex items-center justify-between hover:bg-gray-50 transition-colors group"
                             >
-                                <h2 className="text-xl sm:text-2xl font-black text-gray-900 flex items-center gap-3">
-                                    <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center">
-                                        <CheckCircle className="w-6 h-6 text-white" />
+                                <div className="flex items-center gap-4">
+                                    <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg">
+                                        <CheckCircle className="w-7 h-7 text-white" />
                                     </div>
-                                    <span>Features & Amenities</span>
-                                </h2>
-                                <div className="flex-shrink-0 ml-4">
+                                    <h2 className="text-xl sm:text-2xl md:text-3xl font-black text-gray-900">
+                                        Features & Amenities
+                                    </h2>
+                                </div>
+                                <div className="flex-shrink-0 ml-4 w-10 h-10 bg-gray-100 rounded-xl flex items-center justify-center group-hover:bg-green-50 transition-colors">
                                     {isFeaturesOpen ? (
-                                        <ChevronUp className="w-6 h-6 text-gray-600" />
+                                        <ChevronUp className="w-6 h-6 text-gray-600 group-hover:text-green-600" />
                                     ) : (
-                                        <ChevronDown className="w-6 h-6 text-gray-600" />
+                                        <ChevronDown className="w-6 h-6 text-gray-600 group-hover:text-green-600" />
                                     )}
                                 </div>
                             </button>
 
                             {isFeaturesOpen && (
-                                <div className="px-6 pb-6">
-                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <div className="px-6 sm:px-8 pb-6 sm:pb-8">
+                                    <div className="w-full h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent mb-6"></div>
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                                         {displayFeatures?.map((feature: string, index: number) => (
                                             <div
                                                 key={index}
-                                                className="flex items-center gap-3 p-3 bg-green-50 rounded-xl border-2 border-green-200 hover:bg-green-100 transition-colors"
+                                                className="flex items-center gap-3 p-4 bg-gradient-to-r from-green-50 to-green-100/50 rounded-xl border-2 border-green-200 hover:border-green-400 transition-all group cursor-pointer"
                                             >
-                                                <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0">
-                                                    <Check className="w-4 h-4 text-white" />
+                                                <div className="w-8 h-8 bg-green-500 rounded-lg flex items-center justify-center flex-shrink-0 shadow-md group-hover:scale-110 transition-transform">
+                                                    <Check className="w-5 h-5 text-white font-bold" />
                                                 </div>
-                                                <span className="text-gray-800 font-semibold text-sm">{feature}</span>
+                                                <span className="text-gray-900 font-bold text-sm sm:text-base">{feature}</span>
                                             </div>
                                         ))}
                                     </div>
@@ -345,69 +364,72 @@ Can you help me with the booking?`;
                         </div>
 
                         {/* Specifications - Accordion */}
-                        <div className="bg-white rounded-2xl shadow-lg border-2 border-gray-200 overflow-hidden">
+                        <div className="bg-white rounded-3xl shadow-xl border-2 border-gray-200 overflow-hidden hover:shadow-2xl transition-all">
                             <button
                                 onClick={() => setIsSpecsOpen(!isSpecsOpen)}
-                                className="w-full p-6 flex items-center justify-between hover:bg-gray-50 transition-colors"
+                                className="w-full p-6 sm:p-8 flex items-center justify-between hover:bg-gray-50 transition-colors group"
                             >
-                                <h2 className="text-xl sm:text-2xl font-black text-gray-900 flex items-center gap-3">
-                                    <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center">
-                                        <Settings className="w-6 h-6 text-white" />
+                                <div className="flex items-center gap-4">
+                                    <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg">
+                                        <Settings className="w-7 h-7 text-white" />
                                     </div>
-                                    <span>Vehicle Specifications</span>
-                                </h2>
-                                <div className="flex-shrink-0 ml-4">
+                                    <h2 className="text-xl sm:text-2xl md:text-3xl font-black text-gray-900">
+                                        Specifications
+                                    </h2>
+                                </div>
+                                <div className="flex-shrink-0 ml-4 w-10 h-10 bg-gray-100 rounded-xl flex items-center justify-center group-hover:bg-blue-50 transition-colors">
                                     {isSpecsOpen ? (
-                                        <ChevronUp className="w-6 h-6 text-gray-600" />
+                                        <ChevronUp className="w-6 h-6 text-gray-600 group-hover:text-blue-600" />
                                     ) : (
-                                        <ChevronDown className="w-6 h-6 text-gray-600" />
+                                        <ChevronDown className="w-6 h-6 text-gray-600 group-hover:text-blue-600" />
                                     )}
                                 </div>
                             </button>
 
                             {isSpecsOpen && (
-                                <div className="px-6 pb-6">
-                                    <div className="grid grid-cols-2 gap-4">
+                                <div className="px-6 sm:px-8 pb-6 sm:pb-8">
+                                    <div className="w-full h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent mb-6"></div>
+                                    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
                                         {excursion.seats && (
-                                            <div className="bg-gray-50 rounded-xl p-4 border-2 border-gray-200">
-                                                <div className="text-xs text-gray-600 mb-1 font-semibold">Seats</div>
-                                                <div className="text-sm font-bold text-gray-900">{excursion.seats}</div>
+                                            <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-4 sm:p-5 border-2 border-gray-200 hover:border-blue-300 hover:shadow-lg transition-all group cursor-pointer">
+                                                <div className="text-xs text-gray-600 mb-2 font-bold uppercase tracking-wide">Seats</div>
+                                                <div className="text-lg sm:text-xl font-black text-gray-900 group-hover:text-blue-600 transition-colors">{excursion.seats}</div>
                                             </div>
                                         )}
                                         {excursion.fuelType && (
-                                            <div className="bg-gray-50 rounded-xl p-4 border-2 border-gray-200">
-                                                <div className="text-xs text-gray-600 mb-1 font-semibold">Fuel Type</div>
-                                                <div className="text-sm font-bold text-gray-900">{excursion.fuelType}</div>
+                                            <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-4 sm:p-5 border-2 border-gray-200 hover:border-blue-300 hover:shadow-lg transition-all group cursor-pointer">
+                                                <div className="text-xs text-gray-600 mb-2 font-bold uppercase tracking-wide">Fuel</div>
+                                                <div className="text-lg sm:text-xl font-black text-gray-900 group-hover:text-blue-600 transition-colors">{excursion.fuelType}</div>
                                             </div>
                                         )}
                                         {excursion.acceleration && (
-                                            <div className="bg-gray-50 rounded-xl p-4 border-2 border-gray-200">
-                                                <div className="text-xs text-gray-600 mb-1 font-semibold">0-100 km/h</div>
-                                                <div className="text-sm font-bold text-gray-900">{excursion.acceleration} sec</div>
+                                            <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-4 sm:p-5 border-2 border-gray-200 hover:border-blue-300 hover:shadow-lg transition-all group cursor-pointer">
+                                                <div className="text-xs text-gray-600 mb-2 font-bold uppercase tracking-wide">0-100</div>
+                                                <div className="text-lg sm:text-xl font-black text-gray-900 group-hover:text-blue-600 transition-colors">{excursion.acceleration}s</div>
                                             </div>
                                         )}
                                         {excursion.maxSpeed && (
-                                            <div className="bg-gray-50 rounded-xl p-4 border-2 border-gray-200">
-                                                <div className="text-xs text-gray-600 mb-1 font-semibold">Top Speed</div>
-                                                <div className="text-sm font-bold text-gray-900">{excursion.maxSpeed} km/h</div>
+                                            <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-4 sm:p-5 border-2 border-gray-200 hover:border-blue-300 hover:shadow-lg transition-all group cursor-pointer">
+                                                <div className="text-xs text-gray-600 mb-2 font-bold uppercase tracking-wide">Top Speed</div>
+                                                <div className="text-lg sm:text-xl font-black text-gray-900 group-hover:text-blue-600 transition-colors">{excursion.maxSpeed}</div>
                                             </div>
                                         )}
                                         {excursion.year && (
-                                            <div className="bg-gray-50 rounded-xl p-4 border-2 border-gray-200">
-                                                <div className="text-xs text-gray-600 mb-1 font-semibold">Year</div>
-                                                <div className="text-sm font-bold text-gray-900">{excursion.year}</div>
+                                            <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-4 sm:p-5 border-2 border-gray-200 hover:border-blue-300 hover:shadow-lg transition-all group cursor-pointer">
+                                                <div className="text-xs text-gray-600 mb-2 font-bold uppercase tracking-wide">Year</div>
+                                                <div className="text-lg sm:text-xl font-black text-gray-900 group-hover:text-blue-600 transition-colors">{excursion.year}</div>
                                             </div>
                                         )}
                                         {excursion.carType && (
-                                            <div className="bg-gray-50 rounded-xl p-4 border-2 border-gray-200">
-                                                <div className="text-xs text-gray-600 mb-1 font-semibold">Body Type</div>
-                                                <div className="text-sm font-bold text-gray-900">{excursion.carType}</div>
+                                            <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-4 sm:p-5 border-2 border-gray-200 hover:border-blue-300 hover:shadow-lg transition-all group cursor-pointer">
+                                                <div className="text-xs text-gray-600 mb-2 font-bold uppercase tracking-wide">Type</div>
+                                                <div className="text-lg sm:text-xl font-black text-gray-900 group-hover:text-blue-600 transition-colors">{excursion.carType}</div>
                                             </div>
                                         )}
                                         {excursion.brand && (
-                                            <div className="bg-gray-50 rounded-xl p-4 border-2 border-gray-200">
-                                                <div className="text-xs text-gray-600 mb-1 font-semibold">Brand</div>
-                                                <div className="text-sm font-bold text-gray-900">{excursion.brand}</div>
+                                            <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-4 sm:p-5 border-2 border-gray-200 hover:border-blue-300 hover:shadow-lg transition-all group cursor-pointer">
+                                                <div className="text-xs text-gray-600 mb-2 font-bold uppercase tracking-wide">Brand</div>
+                                                <div className="text-lg sm:text-xl font-black text-gray-900 group-hover:text-blue-600 transition-colors">{excursion.brand}</div>
                                             </div>
                                         )}
                                     </div>
@@ -416,70 +438,83 @@ Can you help me with the booking?`;
                         </div>
 
                         {/* Rental Information - Accordion */}
-                        <div className="bg-white rounded-2xl shadow-lg border-2 border-gray-200 overflow-hidden">
+                        <div className="bg-white rounded-3xl shadow-xl border-2 border-gray-200 overflow-hidden hover:shadow-2xl transition-all">
                             <button
                                 onClick={() => setIsRentalInfoOpen(!isRentalInfoOpen)}
-                                className="w-full p-6 flex items-center justify-between hover:bg-gray-50 transition-colors"
+                                className="w-full p-6 sm:p-8 flex items-center justify-between hover:bg-gray-50 transition-colors group"
                             >
-                                <h2 className="text-xl sm:text-2xl font-black text-gray-900 flex items-center gap-3">
-                                    <div className="w-10 h-10 bg-gradient-to-br from-red-500 to-red-600 rounded-xl flex items-center justify-center">
-                                        <Info className="w-6 h-6 text-white" />
+                                <div className="flex items-center gap-4">
+                                    <div className="w-12 h-12 bg-gradient-to-br from-red-500 to-red-600 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg">
+                                        <Info className="w-7 h-7 text-white" />
                                     </div>
-                                    <span>Rental Information</span>
-                                </h2>
-                                <div className="flex-shrink-0 ml-4">
+                                    <h2 className="text-xl sm:text-2xl md:text-3xl font-black text-gray-900">
+                                        Rental Terms
+                                    </h2>
+                                </div>
+                                <div className="flex-shrink-0 ml-4 w-10 h-10 bg-gray-100 rounded-xl flex items-center justify-center group-hover:bg-red-50 transition-colors">
                                     {isRentalInfoOpen ? (
-                                        <ChevronUp className="w-6 h-6 text-gray-600" />
+                                        <ChevronUp className="w-6 h-6 text-gray-600 group-hover:text-red-600" />
                                     ) : (
-                                        <ChevronDown className="w-6 h-6 text-gray-600" />
+                                        <ChevronDown className="w-6 h-6 text-gray-600 group-hover:text-red-600" />
                                     )}
                                 </div>
                             </button>
 
                             {isRentalInfoOpen && (
-                                <div className="px-6 pb-6">
-                                    <div className="space-y-3">
-                                        <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-xl border-2 border-gray-200">
-                                            <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
-                                            <div className="flex-1">
-                                                <p className="text-sm text-gray-800 font-semibold mb-1">Minimum Age</p>
-                                                <p className="text-xs text-gray-700">
+                                <div className="px-6 sm:px-8 pb-6 sm:pb-8">
+                                    <div className="w-full h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent mb-6"></div>
+                                    <div className="space-y-4">
+                                        <div className="flex items-start gap-4 p-4 sm:p-5 bg-gradient-to-r from-red-50 to-red-100/50 rounded-2xl border-2 border-red-200 hover:border-red-400 transition-all group cursor-pointer">
+                                            <div className="w-10 h-10 bg-red-500 rounded-xl flex items-center justify-center flex-shrink-0 shadow-md group-hover:scale-110 transition-transform">
+                                                <AlertCircle className="w-6 h-6 text-white" />
+                                            </div>
+                                            <div className="flex-1 min-w-0">
+                                                <p className="text-sm sm:text-base text-gray-900 font-black mb-1">Minimum Age</p>
+                                                <p className="text-xs sm:text-sm text-gray-700 font-medium leading-relaxed">
                                                     Driver must be at least 21 years old with a valid driving license.
                                                 </p>
                                             </div>
                                         </div>
-                                        <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-xl border-2 border-gray-200">
-                                            <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
-                                            <div className="flex-1">
-                                                <p className="text-sm text-gray-800 font-semibold mb-1">Security Deposit</p>
-                                                <p className="text-xs text-gray-700">
+                                        <div className="flex items-start gap-4 p-4 sm:p-5 bg-gradient-to-r from-blue-50 to-blue-100/50 rounded-2xl border-2 border-blue-200 hover:border-blue-400 transition-all group cursor-pointer">
+                                            <div className="w-10 h-10 bg-blue-500 rounded-xl flex items-center justify-center flex-shrink-0 shadow-md group-hover:scale-110 transition-transform">
+                                                <AlertCircle className="w-6 h-6 text-white" />
+                                            </div>
+                                            <div className="flex-1 min-w-0">
+                                                <p className="text-sm sm:text-base text-gray-900 font-black mb-1">Security Deposit</p>
+                                                <p className="text-xs sm:text-sm text-gray-700 font-medium leading-relaxed">
                                                     A refundable security deposit is required at the time of pickup.
                                                 </p>
                                             </div>
                                         </div>
-                                        <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-xl border-2 border-gray-200">
-                                            <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
-                                            <div className="flex-1">
-                                                <p className="text-sm text-gray-800 font-semibold mb-1">Insurance</p>
-                                                <p className="text-xs text-gray-700">
+                                        <div className="flex items-start gap-4 p-4 sm:p-5 bg-gradient-to-r from-green-50 to-green-100/50 rounded-2xl border-2 border-green-200 hover:border-green-400 transition-all group cursor-pointer">
+                                            <div className="w-10 h-10 bg-green-500 rounded-xl flex items-center justify-center flex-shrink-0 shadow-md group-hover:scale-110 transition-transform">
+                                                <AlertCircle className="w-6 h-6 text-white" />
+                                            </div>
+                                            <div className="flex-1 min-w-0">
+                                                <p className="text-sm sm:text-base text-gray-900 font-black mb-1">Insurance</p>
+                                                <p className="text-xs sm:text-sm text-gray-700 font-medium leading-relaxed">
                                                     Comprehensive insurance included. Additional coverage options available.
                                                 </p>
                                             </div>
                                         </div>
-                                        <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-xl border-2 border-gray-200">
-                                            <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
-                                            <div className="flex-1">
-                                                <p className="text-sm text-gray-800 font-semibold mb-1">Mileage</p>
-                                                <p className="text-xs text-gray-700">
+                                        <div className="flex items-start gap-4 p-4 sm:p-5 bg-gradient-to-r from-purple-50 to-purple-100/50 rounded-2xl border-2 border-purple-200 hover:border-purple-400 transition-all group cursor-pointer">
+                                            <div className="w-10 h-10 bg-purple-500 rounded-xl flex items-center justify-center flex-shrink-0 shadow-md group-hover:scale-110 transition-transform">
+                                                <AlertCircle className="w-6 h-6 text-white" />
+                                            </div>
+                                            <div className="flex-1 min-w-0">
+                                                <p className="text-sm sm:text-base text-gray-900 font-black mb-1">Mileage</p>
+                                                <p className="text-xs sm:text-sm text-gray-700 font-medium leading-relaxed">
                                                     Daily limit: 250 km. Additional charges apply for excess mileage.
                                                 </p>
                                             </div>
                                         </div>
-                                        <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-xl border-2 border-gray-200">
-                                            <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
-                                            <div className="flex-1">
-                                                <p className="text-sm text-gray-800 font-semibold mb-1">Cancellation Policy</p>
-                                                <p className="text-xs text-gray-700">
+                                        <div className="flex items-start gap-4 p-4 sm:p-5 bg-gradient-to-r from-orange-50 to-orange-100/50 rounded-2xl border-2 border-orange-200 hover:border-orange-400 transition-all group cursor-pointer">
+                                            <div className="w-10 h-10 bg-orange-500 rounded-xl flex items-center justify-center flex-shrink-0 shadow-md group-hover:scale-110 transition-transform">
+                                                <AlertCircle className="w-6 h-6 text-white" />
+                                            </div>
+                                            <div className="flex-1 min-w-0">
+                                                <p className="text-sm sm:text-base text-gray-900 font-black mb-1">Cancellation Policy</p>
+                                                <p className="text-xs sm:text-sm text-gray-700 font-medium leading-relaxed">
                                                     Free cancellation up to 48 hours before pickup. Full refund guaranteed.
                                                 </p>
                                             </div>
@@ -581,7 +616,7 @@ Can you help me with the booking?`;
                             <div className="bg-gradient-to-br from-red-50 to-red-100/50 border-2 border-red-200 rounded-3xl p-8 shadow-xl">
                                 <div className="text-center">
                                     <div className="text-5xl font-black bg-gradient-to-r from-red-600 to-red-700 bg-clip-text text-transparent mb-3">
-                                        {excursion.rating?.toFixed(1)}
+                                        {4.9}
                                     </div>
                                     <div className="flex items-center justify-center gap-1 mb-3">
                                         {[...Array(5)].map((_, i) => (
@@ -590,7 +625,7 @@ Can you help me with the booking?`;
                                     </div>
                                     <p className="text-sm text-gray-700 font-bold mb-1">Excellent Rating</p>
                                     <p className="text-xs text-gray-600 font-medium">
-                                        Based on {excursion.reviewsCount} verified reviews
+                                        Based on {20} verified reviews
                                     </p>
                                 </div>
                             </div>

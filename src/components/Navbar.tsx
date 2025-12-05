@@ -6,6 +6,7 @@ import { useAppDispatch, useAppSelector } from '../hooks/useRedux';
 import { Calendar, LogOut, Menu, ShoppingCart, UserIcon, X } from 'lucide-react';
 import { CurrencySwitcher } from './CurrencySwitcher';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
+import Logo from '../../public/favicon.png'
 
 interface HeaderProps {
   onBookNowClick?: () => void;
@@ -59,9 +60,9 @@ const Header: React.FC<HeaderProps> = () => {
           <Link to="/" className="flex items-center space-x-2 sm:space-x-3 group">
             {/* Logo Image */}
             <LazyLoadImage
-              src="./favicon.png"
+              src={Logo}
               alt="JetSet Logo"
-              loading='lazy'
+              // loading='lazy'
               className="h-8 sm:h-10 md:h-12 w-auto transition-transform duration-300 group-hover:scale-105"
             />
             {/* Brand Text */}
