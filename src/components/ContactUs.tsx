@@ -12,6 +12,10 @@ function ContactForm() {
         message: ''
     });
 
+    const phoneNumber = import.meta.env.VITE_CONTACT_NUMBER;
+    const rentalEmail = import.meta.env.VITE_CAR_RENTAL_EMAIL;
+    const appURL = import.meta.env.VITE_APP_URL;
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setFormData({
             ...formData,
@@ -36,7 +40,7 @@ function ContactForm() {
 
         try {
             // Send form data to PHP backend
-            const response = await fetch('https://www.luxurycars.ae/api/contact.php', {
+            const response = await fetch(`${appURL}/api/contact.php`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -226,8 +230,8 @@ function ContactForm() {
                                     </div>
                                     <div className="min-w-0">
                                         <h3 className="font-black text-base text-gray-900 mb-1">Phone</h3>
-                                        <a href="tel:+971545613397" className="text-sm text-red-700 hover:text-red-800 transition-colors break-all font-bold">
-                                            +971 54561 3397
+                                        <a href={`tel:+${phoneNumber}`} className="text-sm text-red-700 hover:text-red-800 transition-colors break-all font-bold">
+                                            +{phoneNumber}
                                         </a>
                                     </div>
                                 </div>
@@ -238,8 +242,8 @@ function ContactForm() {
                                     </div>
                                     <div className="min-w-0">
                                         <h3 className="font-black text-base text-gray-900 mb-1">Email</h3>
-                                        <a href="mailto:info@luxurycars.ae" className="text-sm text-red-700 hover:text-red-800 transition-colors break-all font-bold">
-                                            info@luxurycars.ae
+                                        <a href={`mailto:${rentalEmail}`} className="text-sm text-red-700 hover:text-red-800 transition-colors break-all font-bold">
+                                            {rentalEmail}
                                         </a>
                                     </div>
                                 </div>

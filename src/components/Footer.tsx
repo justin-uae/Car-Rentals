@@ -2,6 +2,10 @@ import { Mail, Phone, MapPin } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export default function Footer() {
+  const phoneNumber = import.meta.env.VITE_CONTACT_NUMBER;
+  const rentalEmail = import.meta.env.VITE_CAR_RENTAL_EMAIL;
+  const appURL = import.meta.env.VITE_APP_URL;
+
   const quickLinks = [
     { name: "About", href: "/about" },
     { name: "Our Fleet", href: "/fleets" },
@@ -40,16 +44,16 @@ export default function Footer() {
                 <div className="bg-gradient-to-br from-red-600 to-red-700 p-1.5 rounded-lg group-hover:scale-110 transition-transform">
                   <Phone className="w-4 h-4 text-white flex-shrink-0" />
                 </div>
-                <a href="tel:+971545613397" className="text-sm hover:text-red-400 transition-colors font-medium">
-                  +971 54561 3397
+                <a href={`tel:+${phoneNumber}`} className="text-sm hover:text-red-400 transition-colors font-medium">
+                  +{phoneNumber}
                 </a>
               </div>
               <div className="flex items-center gap-2 group">
                 <div className="bg-gradient-to-br from-red-600 to-red-700 p-1.5 rounded-lg group-hover:scale-110 transition-transform">
                   <Mail className="w-4 h-4 text-white flex-shrink-0" />
                 </div>
-                <a href="mailto:info@luxurycars.ae" className="text-sm hover:text-red-400 transition-colors break-all sm:break-normal font-medium">
-                  info@luxurycars.ae
+                <a href={`mailto:${rentalEmail}`} className="text-sm hover:text-red-400 transition-colors break-all sm:break-normal font-medium">
+                  {rentalEmail}
                 </a>
               </div>
             </div>
@@ -75,7 +79,7 @@ export default function Footer() {
           <p className="text-center text-sm text-gray-400 font-medium">
             © 2025{' '}
 
-            <a href="https://www.luxurycarsrental.ae/"
+            <a href={appURL}
               target="_blank"
               rel="noopener noreferrer"
               className="text-red-500 hover:text-red-400 font-bold transition-colors"
