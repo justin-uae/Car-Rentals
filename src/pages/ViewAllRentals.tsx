@@ -61,9 +61,15 @@ const ViewAllRentals = () => {
             label: brand,
         }));
 
-    // Get unique car types from products
+    // Get unique car types from products - handle comma-separated values
     const carTypes = Array.from(
-        new Set(excursions.map((exc: Product) => exc.carType).filter(Boolean))
+        new Set(
+            excursions
+                ?.map((exc: Product) => exc?.carType)
+                ?.filter(Boolean)
+                .flatMap((type) => type!.split(',').map(t => t.trim()))
+                .filter(Boolean)
+        )
     )
         .sort()
         .map((type) => ({
@@ -103,13 +109,22 @@ const ViewAllRentals = () => {
 
         // Search filter
         if (searchQuery) {
-            filtered = filtered.filter(exc =>
-                exc.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                exc.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                exc.location?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                exc.brand?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                exc.carType?.toLowerCase().includes(searchQuery.toLowerCase())
-            );
+            filtered = filtered.filter(exc => {
+                const query = searchQuery.toLowerCase();
+                // Check title, description, location, brand
+                const basicMatch =
+                    exc.title.toLowerCase().includes(query) ||
+                    exc.description.toLowerCase().includes(query) ||
+                    exc.location?.toLowerCase().includes(query) ||
+                    exc.brand?.toLowerCase().includes(query);
+
+                // Check carType (handle comma-separated values)
+                const carTypeMatch = exc.carType
+                    ? exc.carType.split(',').some(type => type.trim().toLowerCase().includes(query))
+                    : false;
+
+                return basicMatch || carTypeMatch;
+            });
         }
 
         // Location filter
@@ -126,11 +141,14 @@ const ViewAllRentals = () => {
             );
         }
 
-        // Type filter
+        // Type filter - handle comma-separated types
         if (selectedType) {
-            filtered = filtered.filter(exc =>
-                exc.carType?.toLowerCase() === selectedType.toLowerCase()
-            );
+            filtered = filtered.filter(exc => {
+                if (!exc.carType) return false;
+                // Split carType by comma, trim, and check if any matches selectedType
+                const types = exc.carType.split(',').map(t => t.trim().toLowerCase());
+                return types.includes(selectedType.toLowerCase());
+            });
         }
 
         // Sort
@@ -356,49 +374,63 @@ const ViewAllRentals = () => {
 // Hero Section Component
 const HeroSection = ({ searchQuery, setSearchQuery, totalCount, selectedLocation, selectedBrand }: any) => (
     <div className="relative bg-gradient-to-br from-red-600 via-red-700 to-red-600 text-white py-16 md:py-20 overflow-hidden">
+        {/* Background Image */}
+        <div className="absolute inset-0">
+            <img
+                src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=1920&auto=format&fit=crop"
+                alt="Luxury Supercar"
+                className="w-full h-full object-cover object-center"
+                loading="eager"
+            />
+            {/* Stronger dark overlay for better text readability */}
+            <div className="absolute inset-0 bg-gradient-to-br from-black/90 via-red-900/10 to-black/75"></div>
+        </div>
+
         {/* Decorative Background Elements */}
-        <div className="absolute inset-0 opacity-10">
+        <div className="absolute inset-0 opacity-10 z-[1]">
             <div className="absolute top-10 left-10 w-40 h-40 bg-white rounded-full blur-3xl animate-pulse"></div>
             <div className="absolute bottom-10 right-10 w-56 h-56 bg-white rounded-full blur-3xl animate-pulse delay-700"></div>
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-white rounded-full blur-3xl animate-pulse delay-1000"></div>
         </div>
 
-        <div className="relative max-w-7xl mx-auto px-4 text-center">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-black mb-4 drop-shadow-lg">
+        <div className="relative max-w-7xl mx-auto px-4 text-center z-10">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-black mb-4 drop-shadow-2xl text-white">
                 {selectedBrand ? (
                     <>
-                        <span className="text-gray-200">{selectedBrand}</span> Collection
+                        <span className="text-red-500">{selectedBrand}</span> Collection
                     </>
                 ) : selectedLocation ? (
                     <>
-                        Rent in <span className="text-gray-200">{selectedLocation}</span>
+                        Rent in <span className="text-red-300">{selectedLocation}</span>
                     </>
                 ) : (
                     <>
-                        Luxury Car Rentals
+                        <span className="text-red-500">Luxury</span> Car Rentals
                     </>
                 )}
             </h1>
-            <p className="text-lg md:text-xl lg:text-2xl text-white/95 mb-8 font-medium drop-shadow max-w-3xl mx-auto">
+            <p className="text-lg md:text-xl lg:text-2xl text-white mb-8 font-medium drop-shadow-lg max-w-3xl mx-auto">
                 Explore {totalCount}+ premium vehicles across the UAE
             </p>
 
             <div className="max-w-2xl mx-auto">
                 <div className="relative group">
-                    <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 md:w-6 md:h-6 text-gray-400 group-focus-within:text-red-600 transition-colors" />
+                    <div className="absolute left-5 top-1/2 -translate-y-1/2 z-10">
+                        <Search className="w-5 h-5 md:w-6 md:h-6 text-gray-400 group-focus-within:text-red-600 transition-colors" />
+                    </div>
                     <input
                         type="text"
                         placeholder="Search vehicles, brands, models..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="w-full pl-14 md:pl-16 pr-6 py-4 md:py-5 rounded-2xl text-gray-800 md:text-lg focus:outline-none focus:ring-4 focus:ring-red-300 shadow-2xl font-medium border-2 border-transparent focus:border-red-300 transition-all"
+                        className="relative w-full pl-14 md:pl-16 pr-12 py-4 md:py-5 rounded-2xl bg-white text-gray-800 placeholder:text-gray-500 md:text-lg focus:outline-none focus:ring-4 focus:ring-red-400 shadow-2xl font-medium border-2 border-white focus:border-red-400 transition-all"
                     />
                     {searchQuery && (
                         <button
                             onClick={() => setSearchQuery('')}
-                            className="absolute right-4 top-1/2 -translate-y-1/2 p-1.5 hover:bg-gray-100 rounded-full transition-colors"
+                            className="absolute right-4 top-1/2 -translate-y-1/2 p-1.5 hover:bg-gray-100 rounded-full transition-colors z-10"
                         >
-                            <X className="w-5 h-5 text-gray-500" />
+                            <X className="w-5 h-5 text-gray-500 hover:text-gray-700" />
                         </button>
                     )}
                 </div>
@@ -426,8 +458,8 @@ const FilterSidebar = ({
     isTypeOpen,
     setIsTypeOpen
 }: any) => (
-    <div className="bg-white rounded-2xl shadow-lg p-6 sticky top-4 border-2 border-gray-200">
-        <div className="flex justify-between items-center mb-6 pb-4 border-b-2 border-gray-200">
+    <div className="bg-white rounded-2xl shadow-lg p-6 sticky top-4 border-2 border-gray-200 max-h-[calc(100vh-2rem)] overflow-y-auto">
+        <div className="flex justify-between items-center mb-6 pb-4 border-b-2 border-gray-200 sticky top-0 bg-white z-10">
             <div className="flex items-center gap-2">
                 <SlidersHorizontal className="w-5 h-5 text-red-600" />
                 <h2 className="text-xl font-black text-gray-900">Filters</h2>
@@ -440,106 +472,109 @@ const FilterSidebar = ({
             </button>
         </div>
 
-        {/* Car Brand Filter */}
-        {carBrands.length > 0 && (
-            <CollapsibleFilterSection
-                title="Car Brand"
-                isOpen={isBrandOpen}
-                setIsOpen={setIsBrandOpen}
-            >
-                <button
-                    onClick={() => setSelectedBrand('')}
-                    className={`group flex items-center gap-2 w-full text-left px-3 py-2.5 rounded-xl transition-all font-medium ${!selectedBrand
-                        ? 'bg-gradient-to-r from-red-600 to-red-700 text-white shadow-md'
-                        : 'hover:bg-gray-50 text-gray-700'
-                        }`}
+        <div className="space-y-0">{/* Filter sections container */}
+
+            {/* Car Brand Filter */}
+            {carBrands.length > 0 && (
+                <CollapsibleFilterSection
+                    title="Car Brand"
+                    isOpen={isBrandOpen}
+                    setIsOpen={setIsBrandOpen}
                 >
-                    <Car className={`w-4 h-4 ${!selectedBrand ? 'text-white' : 'text-red-600'}`} />
-                    All Brands
-                </button>
-                {carBrands.map((brand: any) => (
                     <button
-                        key={brand.value}
-                        onClick={() => setSelectedBrand(brand.value)}
-                        className={`group flex items-center gap-2 w-full text-left px-3 py-2.5 rounded-xl transition-all font-medium ${selectedBrand === brand.value
+                        onClick={() => setSelectedBrand('')}
+                        className={`group flex items-center gap-2 w-full text-left px-3 py-2.5 rounded-xl transition-all font-medium ${!selectedBrand
                             ? 'bg-gradient-to-r from-red-600 to-red-700 text-white shadow-md'
                             : 'hover:bg-gray-50 text-gray-700'
                             }`}
                     >
-                        <Car className={`w-4 h-4 ${selectedBrand === brand.value ? 'text-white' : 'text-red-600'}`} />
-                        {brand.label}
+                        <Car className={`w-4 h-4 ${!selectedBrand ? 'text-white' : 'text-red-600'}`} />
+                        All Brands
                     </button>
-                ))}
-            </CollapsibleFilterSection>
-        )}
+                    {carBrands.map((brand: any) => (
+                        <button
+                            key={brand.value}
+                            onClick={() => setSelectedBrand(brand.value)}
+                            className={`group flex items-center gap-2 w-full text-left px-3 py-2.5 rounded-xl transition-all font-medium ${selectedBrand === brand.value
+                                ? 'bg-gradient-to-r from-red-600 to-red-700 text-white shadow-md'
+                                : 'hover:bg-gray-50 text-gray-700'
+                                }`}
+                        >
+                            <Car className={`w-4 h-4 ${selectedBrand === brand.value ? 'text-white' : 'text-red-600'}`} />
+                            {brand.label}
+                        </button>
+                    ))}
+                </CollapsibleFilterSection>
+            )}
 
-        {/* Car Type Filter */}
-        {carTypes.length > 0 && (
-            <CollapsibleFilterSection
-                title="Car Type"
-                isOpen={isTypeOpen}
-                setIsOpen={setIsTypeOpen}
-            >
-                <button
-                    onClick={() => setSelectedType('')}
-                    className={`group flex items-center gap-2 w-full text-left px-3 py-2.5 rounded-xl transition-all font-medium ${!selectedType
-                        ? 'bg-gradient-to-r from-red-600 to-red-700 text-white shadow-md'
-                        : 'hover:bg-gray-50 text-gray-700'
-                        }`}
+            {/* Car Type Filter */}
+            {carTypes.length > 0 && (
+                <CollapsibleFilterSection
+                    title="Car Type"
+                    isOpen={isTypeOpen}
+                    setIsOpen={setIsTypeOpen}
                 >
-                    <Tag className={`w-4 h-4 ${!selectedType ? 'text-white' : 'text-red-600'}`} />
-                    All Types
-                </button>
-                {carTypes.map((type: any) => (
                     <button
-                        key={type.value}
-                        onClick={() => setSelectedType(type.value)}
-                        className={`group flex items-center gap-2 w-full text-left px-3 py-2.5 rounded-xl transition-all font-medium ${selectedType === type.value
+                        onClick={() => setSelectedType('')}
+                        className={`group flex items-center gap-2 w-full text-left px-3 py-2.5 rounded-xl transition-all font-medium ${!selectedType
                             ? 'bg-gradient-to-r from-red-600 to-red-700 text-white shadow-md'
                             : 'hover:bg-gray-50 text-gray-700'
                             }`}
                     >
-                        <Tag className={`w-4 h-4 ${selectedType === type.value ? 'text-white' : 'text-red-600'}`} />
-                        {type.label}
+                        <Tag className={`w-4 h-4 ${!selectedType ? 'text-white' : 'text-red-600'}`} />
+                        All Types
                     </button>
-                ))}
-            </CollapsibleFilterSection>
-        )}
+                    {carTypes.map((type: any) => (
+                        <button
+                            key={type.value}
+                            onClick={() => setSelectedType(type.value)}
+                            className={`group flex items-center gap-2 w-full text-left px-3 py-2.5 rounded-xl transition-all font-medium ${selectedType === type.value
+                                ? 'bg-gradient-to-r from-red-600 to-red-700 text-white shadow-md'
+                                : 'hover:bg-gray-50 text-gray-700'
+                                }`}
+                        >
+                            <Tag className={`w-4 h-4 ${selectedType === type.value ? 'text-white' : 'text-red-600'}`} />
+                            {type.label}
+                        </button>
+                    ))}
+                </CollapsibleFilterSection>
+            )}
 
-        {/* Pickup Location Filter */}
-        {uniqueLocations.length > 0 && (
-            <CollapsibleFilterSection
-                title="Pickup Location"
-                isOpen={isLocationOpen}
-                setIsOpen={setIsLocationOpen}
-            >
-                <button
-                    onClick={() => setSelectedLocation('')}
-                    className={`group flex items-center gap-2 w-full text-left px-3 py-2.5 rounded-xl transition-all font-medium ${!selectedLocation
-                        ? 'bg-gradient-to-r from-red-600 to-red-700 text-white shadow-md'
-                        : 'hover:bg-gray-50 text-gray-700'
-                        }`}
+            {/* Pickup Location Filter */}
+            {uniqueLocations.length > 0 && (
+                <CollapsibleFilterSection
+                    title="Pickup Location"
+                    isOpen={isLocationOpen}
+                    setIsOpen={setIsLocationOpen}
                 >
-                    <MapPin className={`w-4 h-4 ${!selectedLocation ? 'text-white' : 'text-red-600'}`} />
-                    All Locations
-                </button>
-                {uniqueLocations.map((location: any) => (
                     <button
-                        key={location.value}
-                        onClick={() => setSelectedLocation(location.value)}
-                        className={`group flex items-center gap-2 w-full text-left px-3 py-2.5 rounded-xl transition-all font-medium ${selectedLocation === location.value
+                        onClick={() => setSelectedLocation('')}
+                        className={`group flex items-center gap-2 w-full text-left px-3 py-2.5 rounded-xl transition-all font-medium ${!selectedLocation
                             ? 'bg-gradient-to-r from-red-600 to-red-700 text-white shadow-md'
                             : 'hover:bg-gray-50 text-gray-700'
                             }`}
                     >
-                        <MapPin className={`w-4 h-4 ${selectedLocation === location.value ? 'text-white' : 'text-red-600'}`} />
-                        {location.label}
+                        <MapPin className={`w-4 h-4 ${!selectedLocation ? 'text-white' : 'text-red-600'}`} />
+                        All Locations
                     </button>
-                ))}
-            </CollapsibleFilterSection>
-        )}
+                    {uniqueLocations.map((location: any) => (
+                        <button
+                            key={location.value}
+                            onClick={() => setSelectedLocation(location.value)}
+                            className={`group flex items-center gap-2 w-full text-left px-3 py-2.5 rounded-xl transition-all font-medium ${selectedLocation === location.value
+                                ? 'bg-gradient-to-r from-red-600 to-red-700 text-white shadow-md'
+                                : 'hover:bg-gray-50 text-gray-700'
+                                }`}
+                        >
+                            <MapPin className={`w-4 h-4 ${selectedLocation === location.value ? 'text-white' : 'text-red-600'}`} />
+                            {location.label}
+                        </button>
+                    ))}
+                </CollapsibleFilterSection>
+            )}
 
-        {/* Info Box */}
+        </div>
+        {/* End of filter sections container */}
         <div className="mt-6 p-4 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl border border-gray-200">
             <div className="flex items-start gap-3">
                 <Sparkles className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />

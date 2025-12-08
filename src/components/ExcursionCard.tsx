@@ -15,6 +15,7 @@ interface Product {
     rating: number;
     reviewsCount: number;
     groupSize: string;
+    carType?: string;
 }
 
 export const ExcursionCard = ({ excursion }: { excursion: Product }) => {
