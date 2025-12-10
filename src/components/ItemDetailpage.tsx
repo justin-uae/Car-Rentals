@@ -508,17 +508,6 @@ Can you help me with the booking?`;
                                                 </p>
                                             </div>
                                         </div>
-                                        <div className="flex items-start gap-4 p-4 sm:p-5 bg-gradient-to-r from-orange-50 to-orange-100/50 rounded-2xl border-2 border-orange-200 hover:border-orange-400 transition-all group cursor-pointer">
-                                            <div className="w-10 h-10 bg-orange-500 rounded-xl flex items-center justify-center flex-shrink-0 shadow-md group-hover:scale-110 transition-transform">
-                                                <AlertCircle className="w-6 h-6 text-white" />
-                                            </div>
-                                            <div className="flex-1 min-w-0">
-                                                <p className="text-sm sm:text-base text-gray-900 font-black mb-1">Cancellation Policy</p>
-                                                <p className="text-xs sm:text-sm text-gray-700 font-medium leading-relaxed">
-                                                    Free cancellation up to 48 hours before pickup. Full refund guaranteed.
-                                                </p>
-                                            </div>
-                                        </div>
                                     </div>
                                 </div>
                             )}

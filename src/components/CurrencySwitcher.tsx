@@ -62,7 +62,7 @@ export function CurrencySwitcher() {
                     alt={`${selectedCurrency.name} flag`}
                     className="w-6 h-4 object-cover rounded shadow-sm"
                 />
-                <span className="font-semibold text-sm">{selectedCurrency.code}</span>
+                <span className="font-semibold text-black text-sm">{selectedCurrency.code}</span>
             </button>
 
             {/* Dropdown */}

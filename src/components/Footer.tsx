@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 export default function Footer() {
   const phoneNumber = import.meta.env.VITE_CONTACT_NUMBER;
   const rentalEmail = import.meta.env.VITE_CAR_RENTAL_EMAIL;
-  const appURL = import.meta.env.VITE_APP_URL;
 
   const quickLinks = [
     { name: "About", href: "/about" },
@@ -27,7 +26,7 @@ export default function Footer() {
               {/* <LazyLoadImage className="w-12 h-10 sm:w-14 sm:h-14 md:w-16 md:h-14 transform group-hover:scale-110 transition-transform" src={Logo} /> */}
               <div className="flex flex-col">
                 <span className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-primary group-hover:text-accent transition-colors duration-300">
-                  JETSET <span className="text-red-600">RENTALS</span>
+                  UAE Luxury <span className="text-red-600">Car Hire</span>
                 </span>
               </div>
             </Link>
@@ -79,12 +78,12 @@ export default function Footer() {
           <p className="text-center text-sm text-gray-400 font-medium">
             © 2025{' '}
 
-            <a href={appURL}
+            <a href={'https://www.uaeluxurycarhire.com/'}
               target="_blank"
               rel="noopener noreferrer"
               className="text-red-500 hover:text-red-400 font-bold transition-colors"
             >
-              LuxuryCarsRental.ae
+              Uaeluxurycarhire.com
             </a>{' '}
             is a trading style of Jetset Worldwide Travel & Tourism. All rights reserved.
           </p>
